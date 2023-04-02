@@ -8,6 +8,8 @@
   <ul>
   {% for rating in ratings %}
     <li>User {{ rating.user_id|default:"Anonymous" }} gave a rating of {{ rating.rating }}</li>
+    <h2>{{ professor.name }}</h2>
+<p>Average rating: {{ average_rating }}</p>
   {% endfor %}
   </ul>
 {% else %}

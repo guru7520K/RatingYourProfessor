@@ -15,7 +15,10 @@ import uuid
 
 
 def index(request):
-    return render(request,"index.html")
+   professors=Professor.objects.all
+   return render(request,"index.html",{'professors':professors})
+
+
 
 def register(request):
     if request.method == 'POST':
@@ -45,6 +48,8 @@ def user_logout(request):
 
 def professor_detail(request, professor_id):
     professor = Professor.objects.get(id=professor_id)
+    average_rating = professor.get_average_rating()
+    print('average rating')
     if request.method == 'POST':
         rating = int(request.POST['rating'])
         user_id = request.POST['user_id']
@@ -61,9 +66,9 @@ def professor_detail(request, professor_id):
             rating = Rating.objects.get(user_id=user_id, professor=professor)
         except Rating.DoesNotExist:
             rating = None
-            ratings = Rating.objects.filter(professor=professor)  # add this line
+            ratings = Rating.objects.filter(professor=professor)  
             print(ratings) 
-        return render(request, 'professor_detail.html', {'professor': professor, 'rating': rating, 'user_id': user_id,'ratings': ratings})
+        return render(request, 'professor_detail.html', {'professor': professor, 'rating': rating, 'user_id': user_id,'ratings': ratings,'average_rating':average_rating})
 
     
 def create_professor(request):
@@ -99,6 +104,9 @@ def add_rating(request, professor_id):
 
     return render(request, 'add_rating.html', {'form': form, 'professor': professor})
 
+def professor_list(request):
+     professors=Professor.objects.all()
+     return render(request, 'professor_list.html',{"professors":professors})
 
 
 # def professor_detail(request, professor_id):
