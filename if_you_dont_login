@@ -1,0 +1,33 @@
+IntegrityError at /professor/4/add_rating/
+NOT NULL constraint failed: ratingprofessor_rating.user_id
+ getting this error when i dont log in or register
+This error indicates that the user_id field in the Rating model is set to null=False, meaning that it cannot be left blank or null when creating a new rating object in the database. However, when a user who is not logged in or registered tries to give a rating, the user_id field is not being set correctly, which is causing this error.
+
+To fix this error, you need to make sure that the user_id is set correctly before saving the rating object in the database. Since the user is not logged in or registered, you can assign a random unique identifier to the user_id field using the uuid module, like this:
+
+python
+Copy code
+import uuid
+
+def add_rating(request, professor_id):
+    professor = Professor.objects.get(id=professor_id)
+
+    if request.method == 'POST':
+        user_id = str(uuid.uuid4())  # generate a random unique identifier for the user
+        try:
+            existing_rating = Rating.objects.get(user_id=user_id, professor=professor)
+            form = RatingForm(request.POST, instance=existing_rating)
+        except Rating.DoesNotExist:
+            form = RatingForm(request.POST)
+
+        if form.is_valid():
+            rating = form.save(commit=False)
+            rating.user_id = user_id
+            rating.professor = professor
+            rating.save()
+            return redirect('professor_detail', professor_id=professor_id)
+    else:
+        form = RatingForm()
+
+    return render(request, 'add_rating.html', {'form': form, 'professor': professor})
+With this modification, a random unique identifier will be generated for the user who is not logged in or registered, and this identifier will be associated with the rating object in the database.
