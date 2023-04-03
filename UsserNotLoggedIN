@@ -1,0 +1,7 @@
+f user directly visits add_rating url without logging in and submit a rating ? i get IntegrityError at /professor/1/add_rating/
+NOT NULL constraint failed: ratingprofessor_rating.user_id why i that
+The error "IntegrityError at /professor/1/add_rating/ NOT NULL constraint failed: ratingprofessor_rating.user_id" occurs because the user_id field in the Rating model 
+is set to default=uuid.uuid4 and editable=False,
+meaning that it is generated automatically and cannot be edited by the user. 
+However, in the add_rating view, when a user is not logged in and tries to submit a rating, the user_id field is not being set, 
+and the default uuid.uuid4 value is not being generated, causing the NOT NULL constraint to fail when trying to save the Rating instance.
