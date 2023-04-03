@@ -19,7 +19,24 @@ def add_rating(request, professor_id):
         form = RatingForm()
 
     return render(request, 'add_rating.html', {'form': form, 'professor': professor})
+    
+    
+      if request.method == 'POST':
+        user_id = request.user.id   the user is logged in, user_id will be set to the id of the logged-in user,
+        which will be used to create or update a rating for the logged-in user and the professor they are rating.
+        The id of the logged-in user is generated automatically by Django when a new user is created in the database.
+
+When a user signs up for an account using Django's built-in authentication system or is added to the database through some other means, 
+Django automatically assigns a unique id to the user record in the database. 
+This id is an auto-incrementing integer, and it serves as the primary key for the user record in the database.
+when a user logs in to their account, Django retrieves the user record from the database and stores it in the request.user attribute. 
+The id of the user is already present in the user record, so it can be accessed as request.user.id as shown in the code.
  
+
+
+
+
+
 let me explain what this Django view function add_rating() does.
 
 The purpose of this view is to handle the submission of a rating form for a specific professor. It takes a professor_id as input, which is used to retrieve the corresponding Professor object from the database.
