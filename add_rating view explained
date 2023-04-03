@@ -33,6 +33,22 @@ when a user logs in to their account, Django retrieves the user record from the 
 The id of the user is already present in the user record, so it can be accessed as request.user.id as shown in the code.
  
 
+how does save() know with model class to associate when save() is used
+When the save() method is used in Django, it knows which model class to associate based on the instance that the method is called on. 
+For example, in the create_professor view, the form.save() method is called on the ProfessorForm instance, so it knows to create a new instance of the Professor model class and save it to the database.
+
+In the add_rating view, the form.save() method is called on the RatingForm instance, 
+so it knows to create a new instance of the Rating model class and save it to the database. The commit=False argument tells the save() method to create a new instance of the Rating model class but not save it to the database yet,
+so that additional fields (in this case, user_id and professor) can be added before the final save.
+
+
+
+
+
+
+
+
+
 
 
 
