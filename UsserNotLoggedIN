@@ -1,6 +1,22 @@
 f user directly visits add_rating url without logging in and submit a rating ? i get IntegrityError at /professor/1/add_rating/
 NOT NULL constraint failed: ratingprofessor_rating.user_id why i that
-The error "IntegrityError at /professor/1/add_rating/ NOT NULL constraint failed: ratingprofessor_rating.user_id" occurs because the user_id field in the Rating model 
+The error "IntegrityError at /professor/1/add_rating/ NOT NULL constraint failed: ratingprofessor_rating.user_id" occurs 
+When a user tries to submit a rating without logging in, the request.user.id value will be None, because there is no authenticated user. As a result, when the add_rating view tries to create a new Rating object with the user_id field set to None,
+it violates the NOT NULL constraint, causing the IntegrityError to be raised,
+
+  if request.method == 'POST':
+        user_id = request.user.id  
+        
+  When a user signs up for an account using Django's built-in authentication system or is added to the database through some other means, Django automatically assigns a unique id to the user record in the database. 
+  This id is an auto-incrementing integer, and it serves as the primary key for the user record in the database.
+
+
+
+
+
+
+
+because the user_id field in the Rating model 
 is set to default=uuid.uuid4 and editable=False,
 meaning that it is generated automatically and cannot be edited by the user. 
 However, in the add_rating view, when a user is not logged in and tries to submit a rating, the user_id field is not being set, 
